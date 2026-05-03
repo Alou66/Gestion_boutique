@@ -9,6 +9,7 @@ import {
 import {
   validate,
 } from '../middlewares/validate.middleware.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
 import uploadProduitImage, { uploadToCloudinary } from '../middlewares/upload.middleware.js';
 import ProduitController from '../controllers/produit.controller.js';
 
@@ -31,17 +32,15 @@ const handleCloudinaryUpload = async (req, res, next) => {
 };
 
 /**
- * Routes Produit - API REST
- * Définit toutes les routes pour les opérations Produit
- */
-
-/**
  * Crée les routes pour les opérations Produit
  * @param {ProduitController} controller - Instance du controller Produit
  * @returns {Router} Router Express configuré
  */
 const createProduitRoutes = (controller) => {
   const router = Router();
+
+  // Applique l'authentification à toutes les routes produits
+  router.use(authenticate);
 
   /**
    * @swagger
@@ -57,6 +56,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Créer un nouveau produit
    *     tags: [Produits]
    *     description: Crée un nouveau produit avec upload optionnel d'image
+   *     security:
+   *       - bearerAuth: []
    *     requestBody:
    *       required: true
    *       content:
@@ -110,6 +111,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       413:
    *         description: Fichier trop volumineux
    *       415:
@@ -132,6 +146,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Récupérer tous les produits
    *     tags: [Produits]
    *     description: Récupère la liste de tous les produits
+   *     security:
+   *       - bearerAuth: []
    *     responses:
    *       200:
    *         description: Liste des produits récupérée avec succès
@@ -150,6 +166,19 @@ const createProduitRoutes = (controller) => {
    *                   type: array
    *                   items:
    *                     $ref: '#/components/schemas/Produit'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       500:
    *         description: Erreur serveur
    */
@@ -162,6 +191,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Récupérer un produit par ID
    *     tags: [Produits]
    *     description: Récupère un produit spécifique par son ID
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -193,6 +224,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Produit non trouvé
    *         content:
@@ -220,6 +264,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Mettre à jour un produit (complet)
    *     tags: [Produits]
    *     description: Met à jour entièrement un produit existant
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -279,6 +325,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Produit non trouvé
    *         content:
@@ -309,6 +368,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Supprimer un produit
    *     tags: [Produits]
    *     description: Supprime un produit et son image Cloudinary
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -340,6 +401,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Produit non trouvé
    *         content:
@@ -367,6 +441,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Incrémenter le stock
    *     tags: [Produits]
    *     description: Incrémente la quantité en stock d'un produit
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -410,6 +486,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Produit non trouvé
    *         content:
@@ -438,6 +527,8 @@ const createProduitRoutes = (controller) => {
    *     summary: Décrémenter le stock
    *     tags: [Produits]
    *     description: Décrémente la quantité en stock d'un produit
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -481,6 +572,19 @@ const createProduitRoutes = (controller) => {
    *           application/json:
    *             schema:
    *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Produit non trouvé
    *         content:
@@ -506,4 +610,3 @@ const createProduitRoutes = (controller) => {
 };
 
 export default createProduitRoutes;
-

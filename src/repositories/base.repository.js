@@ -64,6 +64,17 @@ export class BaseRepository {
   }
 
   /**
+   * Trouve un enregistrement par critères
+   * @param {Object} where - Filtre de recherche
+   * @param {Object} [options] - Options de requête
+   * @returns {Promise<Object|null>} Enregistrement trouvé ou null
+   */
+  async findOne(where, options = {}) {
+    const { include, select } = options;
+    return this.model.findFirst({ where, include, select });
+  }
+
+  /**
    * Compte les enregistrements
    * @param {Object} [where] - Filtre de comptage
    * @returns {Promise<number>} Nombre d'enregistrements

@@ -12,10 +12,14 @@ import {
   updateFournisseurSchema,
 } from '../validations/fournisseur.validation.js';
 import { validate } from '../middlewares/validate.middleware.js';
+import { authenticate } from '../middlewares/auth.middleware.js';
 import FournisseurController from '../controllers/fournisseur.controller.js';
 
 const createFournisseurRoutes = (controller) => {
   const router = Router();
+
+  // Applique l'authentification à toutes les routes fournisseurs
+  router.use(authenticate);
 
   /**
    * @swagger
@@ -24,6 +28,8 @@ const createFournisseurRoutes = (controller) => {
    *     summary: Créer un nouveau fournisseur
    *     tags: [Fournisseurs]
    *     description: Crée un nouveau fournisseur dans le système
+   *     security:
+   *       - bearerAuth: []
    *     requestBody:
    *       required: true
    *       content:
@@ -87,6 +93,19 @@ const createFournisseurRoutes = (controller) => {
    *                         type: string
    *                       message:
    *                         type: string
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       409:
    *         description: Conflit - Fournisseur déjà existant
    *         content:
@@ -116,6 +135,8 @@ const createFournisseurRoutes = (controller) => {
    *     summary: Récupérer tous les fournisseurs
    *     tags: [Fournisseurs]
    *     description: Récupère la liste de tous les fournisseurs
+   *     security:
+   *       - bearerAuth: []
    *     responses:
    *       200:
    *         description: Liste des fournisseurs récupérée avec succès
@@ -134,6 +155,19 @@ const createFournisseurRoutes = (controller) => {
    *                   type: array
    *                   items:
    *                     $ref: '#/components/schemas/Fournisseur'
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       500:
    *         description: Erreur serveur
    */
@@ -146,6 +180,8 @@ const createFournisseurRoutes = (controller) => {
    *     summary: Récupérer un fournisseur par ID
    *     tags: [Fournisseurs]
    *     description: Récupère un fournisseur spécifique par son ID
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -184,6 +220,19 @@ const createFournisseurRoutes = (controller) => {
    *                 message:
    *                   type: string
    *                   example: "ID invalide - doit être un UUID valide"
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Fournisseur non trouvé
    *         content:
@@ -218,6 +267,8 @@ const createFournisseurRoutes = (controller) => {
    *     summary: Mettre à jour un fournisseur
    *     tags: [Fournisseurs]
    *     description: Met à jour un fournisseur existant
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -286,6 +337,19 @@ const createFournisseurRoutes = (controller) => {
    *                         type: string
    *                       message:
    *                         type: string
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Fournisseur non trouvé
    *         content:
@@ -334,6 +398,8 @@ const createFournisseurRoutes = (controller) => {
    *     summary: Supprimer un fournisseur
    *     tags: [Fournisseurs]
    *     description: Supprime un fournisseur existant
+   *     security:
+   *       - bearerAuth: []
    *     parameters:
    *       - in: path
    *         name: id
@@ -372,6 +438,19 @@ const createFournisseurRoutes = (controller) => {
    *                 message:
    *                   type: string
    *                   example: "ID invalide - doit être un UUID valide"
+   *       401:
+   *         description: Accès refusé - Token manquant ou invalide
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: false
+   *                 message:
+   *                   type: string
+   *                   example: "Accès refusé. Token manquant."
    *       404:
    *         description: Fournisseur non trouvé
    *         content:

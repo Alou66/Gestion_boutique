@@ -20,6 +20,28 @@ export const successResponse = (res, data, message = 'Success', statusCode = 200
 };
 
 /**
+ * Send a success response (alias with simplified signature)
+ * @param {Object} res - Express response object
+ * @param {string} message - Success message
+ * @param {Object} [data=null] - Response data
+ * @returns {Object} JSON response
+ */
+export const success = (res, message, data = null) => {
+  return successResponse(res, data, message, 200);
+};
+
+/**
+ * Send a created response
+ * @param {Object} res - Express response object
+ * @param {string} message - Success message
+ * @param {Object} [data=null] - Response data
+ * @returns {Object} JSON response
+ */
+export const created = (res, message, data = null) => {
+  return successResponse(res, data, message, 201);
+};
+
+/**
  * Send an error response
  * @param {Object} res - Express response object
  * @param {string|Error} error - Error message or Error object
